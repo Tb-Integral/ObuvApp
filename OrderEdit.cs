@@ -8,11 +8,7 @@ namespace ObuvApp
     {
         private readonly int? orderId;
 
-        public OrderEdit(int? orderId)
-        {
-            InitializeComponent();
-            this.orderId = orderId;
-        }
+        public OrderEdit(int? id) { InitializeComponent(); orderId = id; }
 
         private void OrderEdit_Load(object sender, EventArgs e)
         {
@@ -24,52 +20,39 @@ namespace ObuvApp
 
                 if (orderId.HasValue)
                 {
-                    int pos = ordersBindingSource.Find("OrderId", orderId.Value);
-                    if (pos >= 0) ordersBindingSource.Position = pos;
+                    ordersBindingSource.Position = ordersBindingSource.Find("OrderId", orderId.Value);
                     tbId.Visible = true;
                 }
                 else
                 {
                     ordersBindingSource.AddNew();
-                    DataRowView row = (DataRowView)ordersBindingSource.Current;
-                    row["OrderActicle"] = "";
-                    row["OrderDate"] = DateTime.Today;
-                    row["DeliveryDate"] = DateTime.Today;
-                    row["StatusName"] = cbStatus.Text;
-                    row["PickupPointId"] = Convert.ToInt32(cbPickup.SelectedValue);
+                    var r = (DataRowView)ordersBindingSource.Current;
+                    r["OrderActicle"] = "";
+                    r["OrderDate"] = DateTime.Today;
+                    r["DeliveryDate"] = DateTime.Today;
+                    r["StatusName"] = cbStatus.Text;
+                    r["PickupPointId"] = cbPickup.SelectedValue;
                     tbId.Visible = false;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка:\n" + ex.Message, "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка"); Close(); }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (tbArticle.Text.Trim() == "") { MessageBox.Show("Укажите артикул"); return; }
+            if (dtpDeliv.Value < dtpOrder.Value) { MessageBox.Show("Дата выдачи раньше даты заказа"); return; }
+
             try
             {
-                Validate();
                 ordersBindingSource.EndEdit();
                 ordersTableAdapter.Update(obuvDBDataSet.Orders);
-
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка:\n" + ex.Message, "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка"); }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
+        private void btnCancel_Click(object sender, EventArgs e) { DialogResult = DialogResult.Cancel; Close(); }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -11,11 +12,7 @@ namespace ObuvApp
         private readonly int? productId;
         private string pendingSource;
 
-        public ProductEdit(int? productId)
-        {
-            InitializeComponent();
-            this.productId = productId;
-        }
+        public ProductEdit(int? id) { InitializeComponent(); productId = id; }
 
         private void ProductEdit_Load(object sender, EventArgs e)
         {
@@ -29,95 +26,71 @@ namespace ObuvApp
 
                 if (productId.HasValue)
                 {
-                    int pos = productsBindingSource.Find("ProductId", productId.Value);
-                    if (pos >= 0) productsBindingSource.Position = pos;
+                    productsBindingSource.Position = productsBindingSource.Find("ProductId", productId.Value);
                     tbId.Visible = true;
                 }
                 else
                 {
                     productsBindingSource.AddNew();
-                    DataRowView row = (DataRowView)productsBindingSource.Current;
-                    row["CategoryName"] = cbCategory.Text;
-                    row["ManufactureName"] = cbManufactures.Text;
-                    row["SupplierName"] = cbSuppliers.Text;
-                    row["UnitName"] = cbUnits.Text;
-                    row["Price"] = 0m;
-                    row["StockQty"] = 0;
-                    row["Discount"] = 0;
-                    row["PhotoPath"] = "";
-                    row["Discription"] = "";
+                    var r = (DataRowView)productsBindingSource.Current;
+                    r["CategoryName"] = cbCategory.Text;
+                    r["ManufactureName"] = cbManufactures.Text;
+                    r["SupplierName"] = cbSuppliers.Text;
+                    r["UnitName"] = cbUnits.Text;
+                    r["Price"] = 0m; r["StockQty"] = 0; r["Discount"] = 0;
+                    r["PhotoPath"] = ""; r["Discription"] = "";
                     tbId.Visible = false;
                 }
+                ShowPhoto();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка"); Close(); }
+        }
 
-                string rel = ((DataRowView)productsBindingSource.Current)["PhotoPath"].ToString();
-                ShowPhoto(Path.Combine(Application.StartupPath, rel));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка:\n" + ex.Message, "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
-            }
+        private void ShowPhoto()
+        {
+            var rel = ((DataRowView)productsBindingSource.Current)["PhotoPath"].ToString();
+            var full = pendingSource ?? (rel == "" ? "" : Path.Combine(Application.StartupPath, rel));
+            pbPhoto.Image = File.Exists(full)
+                ? Image.FromStream(new MemoryStream(File.ReadAllBytes(full)))
+                : Properties.Resources.picture;
         }
 
         private void btnChoosePhoto_Click(object sender, EventArgs e)
         {
-            OpenFileDialog d = new OpenFileDialog();
-            d.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp";
-            if (d.ShowDialog() != DialogResult.OK) return;
-
-            pendingSource = d.FileName;
-            ShowPhoto(pendingSource);
+            var d = new OpenFileDialog { Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp" };
+            if (d.ShowDialog() == DialogResult.OK) { pendingSource = d.FileName; ShowPhoto(); }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (tbName.Text.Trim() == "") { MessageBox.Show("Укажите наименование"); return; }
+            if (tbArticle.Text.Trim() == "") { MessageBox.Show("Укажите артикул"); return; }
+
             try
             {
-                DataRowView row = (DataRowView)productsBindingSource.Current;
-
+                var row = (DataRowView)productsBindingSource.Current;
                 if (pendingSource != null)
                 {
-                    string dir = Path.Combine(Application.StartupPath, "images");
+                    var dir = Path.Combine(Application.StartupPath, "images");
                     Directory.CreateDirectory(dir);
-                    string file = Guid.NewGuid().ToString("N") + Path.GetExtension(pendingSource);
-                    File.Copy(pendingSource, Path.Combine(dir, file));
+                    var rel = "images\\" + Guid.NewGuid().ToString("N") + ".png";
+                    using (var src = Image.FromFile(pendingSource))
+                    using (var bmp = new Bitmap(src, 300, 200))
+                        bmp.Save(Path.Combine(Application.StartupPath, rel), ImageFormat.Png);
 
-                    string oldRel = row["PhotoPath"].ToString();
-                    row["PhotoPath"] = "images\\" + file;
-
-                    if (!string.IsNullOrEmpty(oldRel))
-                    {
-                        string oldFull = Path.Combine(Application.StartupPath, oldRel);
-                        if (File.Exists(oldFull)) File.Delete(oldFull);
-                    }
+                    var old = row["PhotoPath"].ToString();
+                    if (old != "" && File.Exists(Path.Combine(Application.StartupPath, old)))
+                        File.Delete(Path.Combine(Application.StartupPath, old));
+                    row["PhotoPath"] = rel;
                 }
-
                 productsBindingSource.EndEdit();
                 productsTableAdapter.Update(obuvDBDataSet.Products);
-
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка:\n" + ex.Message, "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка"); }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void ShowPhoto(string fullPath)
-        {
-            if (!string.IsNullOrEmpty(fullPath) && File.Exists(fullPath))
-                pbPhoto.Image = Image.FromStream(new MemoryStream(File.ReadAllBytes(fullPath)));
-            else
-                pbPhoto.Image = Properties.Resources.picture;
-        }
+        private void btnCancel_Click(object sender, EventArgs e) { DialogResult = DialogResult.Cancel; Close(); }
     }
 }
