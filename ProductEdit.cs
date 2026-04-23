@@ -57,8 +57,8 @@ namespace ObuvApp
 
         private void btnChoosePhoto_Click(object sender, EventArgs e)
         {
-            var d = new OpenFileDialog { Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp" };
-            if (d.ShowDialog() == DialogResult.OK) { pendingSource = d.FileName; ShowPhoto(); }
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            { pendingSource = openFileDialog.FileName; ShowPhoto(); }
         }
 
         private void btnSave_Click(object sender, EventArgs e)

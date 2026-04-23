@@ -61,6 +61,7 @@
             this.manufacturersTableAdapter = new ObuvApp.ObuvDBDataSetTableAdapters.ManufacturersTableAdapter();
             this.suppliersTableAdapter = new ObuvApp.ObuvDBDataSetTableAdapters.SuppliersTableAdapter();
             this.unitsTableAdapter = new ObuvApp.ObuvDBDataSetTableAdapters.UnitsTableAdapter();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.productsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obuvDBDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fKPriductsCategoriesBindingSource)).BeginInit();
@@ -324,6 +325,12 @@
             // 
             this.unitsTableAdapter.ClearBeforeFill = true;
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.Filter = "Изображения|*.png;*.jpg;*.jpeg;*.bmp";
+            this.openFileDialog.Title = "Выбор фото";
+            // 
             // ProductEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -403,5 +410,6 @@
         private System.Windows.Forms.BindingSource fKPriductsSuppliersBindingSource;
         private System.Windows.Forms.BindingSource fKPriductsManufacturersBindingSource;
         private System.Windows.Forms.BindingSource fKPriductsUnitsBindingSource;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
