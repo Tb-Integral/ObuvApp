@@ -26,12 +26,6 @@ namespace ObuvApp
                 else
                 {
                     ordersBindingSource.AddNew();
-                    var r = (DataRowView)ordersBindingSource.Current;
-                    r["OrderActicle"] = "";
-                    r["OrderDate"] = DateTime.Today;
-                    r["DeliveryDate"] = DateTime.Today;
-                    r["StatusName"] = cbStatus.Text;
-                    r["PickupPointId"] = cbPickup.SelectedValue;
                     tbId.Visible = false;
                 }
             }

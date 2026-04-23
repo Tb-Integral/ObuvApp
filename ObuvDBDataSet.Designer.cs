@@ -1552,6 +1552,10 @@ namespace ObuvApp {
             
             private global::System.Data.DataColumn columnStatusName;
             
+            private static System.DateTime columnOrderDate_defaultValue = global::System.DateTime.Parse("2026-01-01T00:00:00");
+            
+            private static System.DateTime columnDeliveryDate_defaultValue = global::System.DateTime.Parse("2026-01-01T00:00:00");
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public OrdersDataTable() {
@@ -1770,9 +1774,12 @@ namespace ObuvApp {
                 this.columnOrderId.ReadOnly = true;
                 this.columnOrderId.Unique = true;
                 this.columnOrderActicle.AllowDBNull = false;
+                this.columnOrderActicle.DefaultValue = ((string)(""));
                 this.columnOrderActicle.MaxLength = 100;
                 this.columnOrderDate.AllowDBNull = false;
+                this.columnOrderDate.DefaultValue = ((System.DateTime)(OrdersDataTable.columnOrderDate_defaultValue));
                 this.columnDeliveryDate.AllowDBNull = false;
+                this.columnDeliveryDate.DefaultValue = ((System.DateTime)(OrdersDataTable.columnDeliveryDate_defaultValue));
                 this.columnPickupPointId.AllowDBNull = false;
                 this.columnClientFullName.MaxLength = 200;
                 this.columnStatusName.AllowDBNull = false;
