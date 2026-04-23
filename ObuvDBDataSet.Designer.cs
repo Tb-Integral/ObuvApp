@@ -2807,6 +2807,7 @@ namespace ObuvApp {
                 this.columnUnitName.AllowDBNull = false;
                 this.columnUnitName.MaxLength = 50;
                 this.columnPrice.AllowDBNull = false;
+                this.columnPrice.DefaultValue = ((decimal)(0m));
                 this.columnSupplierName.AllowDBNull = false;
                 this.columnSupplierName.MaxLength = 100;
                 this.columnManufactureName.AllowDBNull = false;
@@ -2814,10 +2815,14 @@ namespace ObuvApp {
                 this.columnCategoryName.AllowDBNull = false;
                 this.columnCategoryName.MaxLength = 100;
                 this.columnDiscount.AllowDBNull = false;
+                this.columnDiscount.DefaultValue = ((int)(0));
                 this.columnStockQty.AllowDBNull = false;
+                this.columnStockQty.DefaultValue = ((int)(0));
                 this.columnDiscription.AllowDBNull = false;
+                this.columnDiscription.DefaultValue = ((string)(""));
                 this.columnDiscription.MaxLength = 2147483647;
                 this.columnPhotoPath.AllowDBNull = false;
+                this.columnPhotoPath.DefaultValue = ((string)(""));
                 this.columnPhotoPath.MaxLength = 255;
                 this.columnSearchText.ReadOnly = true;
             }

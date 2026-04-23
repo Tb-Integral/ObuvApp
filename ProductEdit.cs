@@ -32,13 +32,6 @@ namespace ObuvApp
                 else
                 {
                     productsBindingSource.AddNew();
-                    var r = (DataRowView)productsBindingSource.Current;
-                    r["CategoryName"] = cbCategory.Text;
-                    r["ManufactureName"] = cbManufactures.Text;
-                    r["SupplierName"] = cbSuppliers.Text;
-                    r["UnitName"] = cbUnits.Text;
-                    r["Price"] = 0m; r["StockQty"] = 0; r["Discount"] = 0;
-                    r["PhotoPath"] = ""; r["Discription"] = "";
                     tbId.Visible = false;
                 }
                 ShowPhoto();
