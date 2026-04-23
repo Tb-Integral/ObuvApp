@@ -119,7 +119,7 @@
             // cbCategory
             // 
             this.cbCategory.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.productsBindingSource, "CategoryName", true));
-            this.cbCategory.DataSource = this.fKPriductsCategoriesBindingSource;
+            this.cbCategory.DataSource = this.categoriesBindingSource;
             this.cbCategory.DisplayMember = "CategoryName";
             this.cbCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCategory.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -152,7 +152,7 @@
             // cbSuppliers
             // 
             this.cbSuppliers.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.productsBindingSource, "SupplierName", true));
-            this.cbSuppliers.DataSource = this.fKPriductsSuppliersBindingSource;
+            this.cbSuppliers.DataSource = this.suppliersBindingSource;
             this.cbSuppliers.DisplayMember = "SupplierName";
             this.cbSuppliers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSuppliers.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -175,8 +175,8 @@
             // cbManufactures
             // 
             this.cbManufactures.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.productsBindingSource, "ManufactureName", true));
-            this.cbManufactures.DataSource = this.fKPriductsManufacturersBindingSource;
-            this.cbManufactures.DisplayMember = "ManufactureName";
+            this.cbManufactures.DataSource = this.manufacturersBindingSource;
+            this.cbManufactures.DisplayMember = "ManufacturerName";
             this.cbManufactures.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbManufactures.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.cbManufactures.FormattingEnabled = true;
@@ -198,7 +198,7 @@
             // cbUnits
             // 
             this.cbUnits.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.productsBindingSource, "UnitName", true));
-            this.cbUnits.DataSource = this.fKPriductsUnitsBindingSource;
+            this.cbUnits.DataSource = this.unitsBindingSource;
             this.cbUnits.DisplayMember = "UnitName";
             this.cbUnits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbUnits.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
